@@ -25,7 +25,9 @@ Route::middleware('auth:api')->group(function() {
     Route::get('/logout', [SessionController::class, 'logout'])->name('logout.api');
     Route::get('/profile', [SessionController::class, 'profile'])->name('profile.api');
     
+    
     Route::group(['middleware' => ['UserTypeCheck:Customer']], function () {
+        Route::post('/customer_search', [CustomerController::class, 'search'])->name('customer.search');
         // Route::put('/profile/update', [UserController::class, 'update'])->name('update.user');
     });
 });

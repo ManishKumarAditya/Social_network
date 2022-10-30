@@ -8,6 +8,7 @@ use App\Models\Customer;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
@@ -63,5 +64,37 @@ class CustomerController extends Controller
         // response
         $response_data['message'] = 'Welcome mail sent on your email id.';
         return response()->json(['data' => $response_data], 201);
+    }
+
+    // this function is used for search users
+    public function search(Request $request)
+    {
+        // validate incoming request
+        $validator = Validator::make($request->all(), [
+            'name'  => ['required', 'string', 'max:255'],
+        ]);
+
+        if ($validator->fails()) {
+            $response_data['errors'] = $validator->errors()->all();
+            return response()->json(['data' => $response_data], 422);
+        }
+
+        // find customer whose token is null
+        $customers = Customer::where('token', '=', NULL);
+
+        // searching customer by name
+        $customers = Customer::where('name', 'LIKE', '%' . $request['name'] . '%');
+
+        $customers = $customers->get();
+
+        // check customer exist or not
+        if (count($customers) > 0) {
+            $response_data['Customers'] = $customers;
+            $response_data['user'] = Auth::user()->profile;
+            return response()->json(['data' => $response_data], 200);
+        } else {
+            $response_data['message'] = 'No Details found. Try to search again !';
+            return response()->json(['data' => $response_data], 200);
+        }
     }
 }
