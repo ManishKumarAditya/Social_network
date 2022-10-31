@@ -18,7 +18,7 @@ class FriendController extends Controller
         $user = Auth::user()->profile_id;
         // find friend id using id
         if (!$friend = Friend::where('friend_id', $user)->first()) {
-            $response_data['errors'] = 'User not found';
+            $response_data['errors'] = 'you have no friend request';
             return response()->json(['data' => $response_data], 404);
         }
 
