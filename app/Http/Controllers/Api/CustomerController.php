@@ -83,7 +83,7 @@ class CustomerController extends Controller
         $customers = Customer::where('token', '=', NULL);
 
         // searching customer by name
-        $customers = Customer::where('name', 'LIKE', '%' . $request['name'] . '%');
+        $customers = Customer::where('id','<>', Auth::user()->profile_id)->where('name', 'LIKE', '%' . $request['name'] . '%');
 
         $customers = $customers->get();
 

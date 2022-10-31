@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\CustomerController;
+use App\Http\Controllers\Api\FriendController;
 use App\Http\Controllers\Api\SessionController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
@@ -28,7 +29,10 @@ Route::middleware('auth:api')->group(function() {
     
     Route::group(['middleware' => ['UserTypeCheck:Customer']], function () {
         Route::post('/customer_search', [CustomerController::class, 'search'])->name('customer.search');
-        // Route::put('/profile/update', [UserController::class, 'update'])->name('update.user');
+        Route::post('/friend_request', [FriendController::class, 'send_request'])->name('friend.store');
+        Route::get('/see_request', [FriendController::class, 'see_request'])->name('friend.see_request');
+        Route::get('/user_request/{id}/accept', [FriendController::class, 'approve'])->name('friend.approve');
+        Route::get('/see_mutual_friend/{id}', [FriendController::class, 'see_mutual_friend']);
     });
 });
 

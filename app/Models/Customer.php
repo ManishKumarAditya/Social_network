@@ -16,4 +16,9 @@ class Customer extends Model
     public function user(){
         return $this->morphOne(User::class, 'profile');
     }
+
+    public function friends()
+    {
+        return $this->hasMany(Friend::class);
+    }
 }
